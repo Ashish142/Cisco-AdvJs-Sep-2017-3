@@ -40,4 +40,18 @@ describe('Sort', function(){
 		sort();
 		console.table(products);
 	});
+
+	describe('Any List by any attribute', function(){
+		function sort(){
+			//fill in the blanks
+		}
+		describe('Products by cost', function(){
+			sort();
+			console.table(products);
+		});
+		describe('Products by units', function(){
+			sort();
+			console.table(products);
+		});
+	})
 });
