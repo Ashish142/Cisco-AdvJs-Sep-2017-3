@@ -107,3 +107,28 @@ describe('Sort', function(){
 		});
 	});
 });
+
+describe('Filter', function(){
+	describe('All stationary products', function(){
+		function filterStationaryProducts(){
+			var result = [];
+			for(var index=0; index < products.length; index++)
+				if (products[index].category === 'stationary')
+					result.push(products[index]);
+			return result;
+		}
+		var allStationaryProducts = filterStationaryProducts();
+		console.table(allStationaryProducts);
+	});
+	describe('Any list by any criteria', function(){
+		function filter(/*...*/){
+			/*....*/
+		}
+		describe('All costly products [cost > 50]', function(){
+
+		});
+		describe('All understocked products [units < 50]', function(){
+
+		});
+	})
+});
