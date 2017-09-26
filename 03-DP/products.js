@@ -41,17 +41,52 @@ describe('Sort', function(){
 		console.table(products);
 	});
 
+	function sort(/*....*/){
+		/*.....*/
+	}
 	describe('Any List by any attribute', function(){
-		function sort(){
-			//fill in the blanks
-		}
+		/*function sort(lsit, attrName){
+			for(var i=0; i<products.length-1; i++)
+				for(var j=i+1; j<products.length; j++)
+					if (products[i][attrName] > products[j][attrName]){
+						var temp = products[i];
+						products[i] = products[j];
+						products[j] = temp;
+					}
+		}*/
 		describe('Products by cost', function(){
-			sort();
+			sort(products, 'cost');
 			console.table(products);
 		});
 		describe('Products by units', function(){
-			sort();
+			sort(products, 'units');
 			console.table(products);
 		});
-	})
+	});
+
+	describe('Any list by any comparer', function(){
+		/*function sort(list, comparer){
+			for(var i=0; i<products.length-1; i++)
+				for(var j=i+1; j<products.length; j++){
+					var comparerResult = comparer(products[i], products[j]);
+					if (comparerResult > 0){
+						var temp = products[i];
+						products[i] = products[j];
+						products[j] = temp;
+					}
+				}
+		}*/
+		describe('Products by value [ cost * units ]', function(){
+			var productComparerByValue = function(p1, p2){
+				var p1Value = p1.cost * p1.units,
+					p2Value = p2.cost * p2.units;
+				/*if (p1Value < p2Value) return -1;
+				if (p1Value > p2Value) return 1;
+				return 0;*/
+				return p1Value - p2Value;
+			};
+			sort(products, productComparerByValue);
+			console.table(products);
+		});
+	});
 });
