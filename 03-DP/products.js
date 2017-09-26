@@ -41,8 +41,25 @@ describe('Sort', function(){
 		console.table(products);
 	});
 
-	function sort(/*....*/){
-		/*.....*/
+	function sort(list, comparer){
+		let comparerFn = function(){ return 0;};
+		if (typeof comparer === 'function')
+			comparerFn = comparer;
+		if (typeof comparer === 'string')
+			comparerFn = function(item1, item2){
+				if (item1[comparer] < item2[comparer]) return -1;
+				if (item1[comparer] > item2[comparer]) return 1;
+				return 0
+			}
+		for(var i=0; i<products.length-1; i++)
+				for(var j=i+1; j<products.length; j++){
+					var comparerResult = comparerFn(products[i], products[j]);
+					if (comparerResult > 0){
+						var temp = products[i];
+						products[i] = products[j];
+						products[j] = temp;
+					}
+				}
 	}
 	describe('Any List by any attribute', function(){
 		/*function sort(lsit, attrName){
