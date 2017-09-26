@@ -41,7 +41,7 @@ describe('Sort', function(){
 		console.table(products);
 	});
 
-	function sort(list, comparer){
+	function sort(list, comparer, descending){
 		let comparerFn = function(){ return 0;};
 		if (typeof comparer === 'function')
 			comparerFn = comparer;
@@ -51,6 +51,8 @@ describe('Sort', function(){
 				if (item1[comparer] > item2[comparer]) return 1;
 				return 0
 			}
+		if (descending)
+			comparerFn = getDescending(comparerFn);
 		for(var i=0; i<products.length-1; i++)
 				for(var j=i+1; j<products.length; j++){
 					var comparerResult = comparerFn(products[i], products[j]);
@@ -61,6 +63,12 @@ describe('Sort', function(){
 					}
 				}
 	}
+	function getDescending(comparer){
+		return function(){
+			return comparer.apply(undefined, arguments) * -1;
+		}
+	}
+
 	describe('Any List by any attribute', function(){
 		/*function sort(lsit, attrName){
 			for(var i=0; i<products.length-1; i++)
@@ -73,6 +81,10 @@ describe('Sort', function(){
 		}*/
 		describe('Products by cost', function(){
 			sort(products, 'cost');
+			console.table(products);
+		});
+		describe('Products by cost in descending', function(){
+			sort(products, 'cost', true);
 			console.table(products);
 		});
 		describe('Products by units', function(){
@@ -93,16 +105,17 @@ describe('Sort', function(){
 					}
 				}
 		}*/
+		var productComparerByValue = function(p1, p2){
+			var p1Value = p1.cost * p1.units,
+				p2Value = p2.cost * p2.units;
+			return p1Value - p2Value;
+		};
 		describe('Products by value [ cost * units ]', function(){
-			var productComparerByValue = function(p1, p2){
-				var p1Value = p1.cost * p1.units,
-					p2Value = p2.cost * p2.units;
-				/*if (p1Value < p2Value) return -1;
-				if (p1Value > p2Value) return 1;
-				return 0;*/
-				return p1Value - p2Value;
-			};
 			sort(products, productComparerByValue);
+			console.table(products);
+		});
+		describe('Products by value [ cost * units ][descending]', function(){
+			sort(products, getDescending(productComparerByValue));
 			console.table(products);
 		});
 	});
@@ -134,6 +147,7 @@ describe('Filter', function(){
 				return !criteria.apply(undefined, arguments);
 			};
 		}
+
 		var costlyProductCriteria = function(product){
 			return product.cost > 50;
 		};
