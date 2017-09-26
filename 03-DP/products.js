@@ -128,19 +128,37 @@ describe('Filter', function(){
 					result.push(list[index]);
 			return result;
 		}
-		describe('All costly products [cost > 50]', function(){
-			var costlyProductCriteria = function(product){
-				return product.cost > 50;
+
+		function negate(criteria){
+			return function(){
+				return !criteria.apply(undefined, arguments);
 			};
+		}
+		var costlyProductCriteria = function(product){
+			return product.cost > 50;
+		};
+		var underStockedProductCriteria = function(product){
+			return product.units < 50;
+		};
+		describe('All costly products [cost > 50]', function(){
+			
 			var costlyProducts = filter(products, costlyProductCriteria);
 			console.table(costlyProducts);
 		});
+		describe('All affordable products [!costlyProducts]', function(){
+			var affordableProductCriteria = negate(costlyProductCriteria);
+			var affordableProducts = filter(products, affordableProductCriteria);
+			console.table(affordableProducts);
+		})
 		describe('All understocked products [units < 50]', function(){
-			var underStockedProductCriteria = function(product){
-				return product.units < 50;
-			};
+			
 			var underStockedProducts = filter(products, underStockedProductCriteria);
 			console.table(underStockedProducts);
 		});
-	})
+		describe('All wellstocked products [!underStockedProducts]', function(){
+			var wellStockedProductCriteria = negate(underStockedProductCriteria);
+			var wellStockedProducts = filter(products, wellStockedProductCriteria);
+			console.table(wellStockedProducts);
+		});
+	});
 });
